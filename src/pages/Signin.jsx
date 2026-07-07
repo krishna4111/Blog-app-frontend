@@ -1,11 +1,22 @@
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
+
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function Signin() {
   const [formData, setFormData] = useState();
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { loading: isLoading, error: errorMessage } = useSelector(
+    (state) => state.user,
+  );
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -17,17 +28,14 @@ export default function Signin() {
     password = password.trim();
 
     try {
-      setIsLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart());
 
       setTimeout(() => {}, 50000);
 
       if (!email || !password) {
-        setErrorMessage("Email and password are required in here");
+        return dispatch(signInFailure("Email and password is required"));
       }
       const signInUrl = "/api/user/sign-in";
-
-      console.log("formData is ====>", formData);
 
       const result = await fetch(signInUrl, {
         method: "POST",
@@ -38,18 +46,18 @@ export default function Signin() {
       });
 
       const data = await result.json();
-      console.log(data);
-      setIsLoading(false);
 
       if (!data.success) {
-        setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
+
+      dispatch(signInSuccess(data.user));
+
       //we get the token keep it in the redux store and toolkit etc.
       navigate("/home");
     } catch (error) {
-      setIsLoading(false);
-      setErrorMessage(error.message);
+      dispatch(signInFailure(error.message));
       console.error("Error when sign in ", error);
     }
   };
