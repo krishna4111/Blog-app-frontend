@@ -9,6 +9,7 @@ import {
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 
 export default function Signin() {
   const [formData, setFormData] = useState();
@@ -115,21 +116,22 @@ export default function Signin() {
             {errorMessage && (
               <p className="font-semibold text-red-700 p-2">{errorMessage}</p>
             )}
-            {isLoading ? (
-              <div className="bg-gradient-to-r from-indigo-400 via-violet-600 to-pink-500 text-center rounded-md">
-                <Spinner className="p-4" />
-                <span className="text-sm font-semibold text-white">
-                  Loading ...
-                </span>
-              </div>
-            ) : (
-              <Button
-                type="submit"
-                className="bg-gradient-to-r from-indigo-400 via-violet-600 to-pink-500 cursor-pointer"
-              >
-                Sign In
-              </Button>
-            )}
+            <Button
+              type="submit"
+              className="bg-gradient-to-r from-indigo-400 via-violet-600 to-pink-500 cursor-pointer"
+            >
+              {isLoading ? (
+                <>
+                  <Spinner className="p-4" />
+                  <span className="text-sm font-semibold text-white">
+                    Loading ...
+                  </span>
+                </>
+              ) : (
+                "singIn"
+              )}
+            </Button>
+            <OAuth />
 
             <p>
               Don't Have an account please click here to{" "}
