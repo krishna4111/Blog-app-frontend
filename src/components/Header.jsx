@@ -5,13 +5,20 @@ import {
   NavbarToggle,
   TextInput,
   Button,
+  Dropdown,
+  Avatar,
+  DropdownHeader,
+  DropdownItem,
+  DropdownDivider,
 } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineLightMode } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const path = useLocation().pathname;
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <Navbar className="text-white">
@@ -40,11 +47,37 @@ export default function Header() {
         <Button className="w-12 h-10 hidden lg:inline" color="gray" pill>
           <MdOutlineLightMode />
         </Button>
-        <Link to="/sign-in">
-          <Button className="bg-gradient-to-br from-purple-600 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-blue-300 dark:focus:ring-blue-800">
-            Sign In
-          </Button>
-        </Link>
+        {!currentUser ? (
+          <Link to="/sign-in">
+            <Button className="bg-gradient-to-br from-purple-600 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-blue-300 dark:focus:ring-blue-800">
+              Sign In
+            </Button>
+          </Link>
+        ) : (
+          // <img src={currentUser?.profilePicture}></img>
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar
+                alt="user"
+                // img={currentUser?.profilePicture ||}
+                img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlbbdPqXU3wwsJQPwkgU42saoIIg22ct8rNcFV_RU6PA&s=10"
+                rounded
+              ></Avatar>
+            }
+          >
+            <DropdownHeader className="flex flex-col">
+              <span className="truncate">{currentUser.username}</span>
+              <span className="truncate">{currentUser.email}</span>
+            </DropdownHeader>
+            <Link to={"/dashboard?tab=profile"}>
+              <DropdownItem>Profile</DropdownItem>
+            </Link>
+            <DropdownDivider />
+            <DropdownItem>Sign Out</DropdownItem>
+          </Dropdown>
+        )}
       </div>
       <NavbarToggle />
       <NavbarCollapse>
