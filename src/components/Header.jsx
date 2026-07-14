@@ -14,11 +14,18 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineLightMode } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleThem } from "../redux/theme/themeSlice";
 
 export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const handleThemChange = () => {
+    console.log("toggle clicked");
+    dispatch(toggleThem());
+  };
 
   return (
     <Navbar className="text-white">
@@ -44,7 +51,12 @@ export default function Header() {
       </Button>
 
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 hidden lg:inline" color="gray" pill>
+        <Button
+          className="w-12 h-10 hidden lg:inline"
+          color="gray"
+          pill
+          onClick={handleThemChange}
+        >
           <MdOutlineLightMode />
         </Button>
         {!currentUser ? (
