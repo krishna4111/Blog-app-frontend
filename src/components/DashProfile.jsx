@@ -1,11 +1,13 @@
 import { TextInput, Button, Label } from "flowbite-react";
 import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../redux/user/userSlice";
+import { signOutSuccess, updateUser } from "../redux/user/userSlice";
 import { mapUser } from "../dto/user.dto";
+import { useNavigate } from "react-router-dom";
 
 export default function DashProfile() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { currentUser } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
@@ -69,16 +71,24 @@ export default function DashProfile() {
     }
   };
 
-  // useEffect(() => {
-  //   if (imageFile) {
-  //     //call the image upload function
-  //     uploadImage();
-  //   }
-  // }, [imageFile]);
+  const signOutUser = async () => {
+    console.log("signout triggered");
+    try {
+      const result = await fetch("http://localhost:4500/api/user/signout", {
+        method: "Post",
+        credentials: "include",
+      });
 
-  // const uploadImage = async () => {
-  //   console.log("uploading image");
-  // };
+      const data = await result.json();
+
+      if (!data.success) {
+        console.error("Error when sing out user", data.message);
+      }
+      dispatch(signOutSuccess());
+    } catch (error) {
+      console.error("Error when signout user", error);
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
@@ -138,20 +148,6 @@ export default function DashProfile() {
             });
           }}
         ></TextInput>
-        <Label>Password</Label>
-        <TextInput
-          type="password"
-          id="password"
-          placeholder="password"
-          onChange={(e) => {
-            setFormData((prev) => {
-              return {
-                ...prev,
-                password: e.target.value,
-              };
-            });
-          }}
-        ></TextInput>
         <Button
           type="submit"
           className="bg-blue-300 cursor-pointer text-white"
@@ -161,7 +157,9 @@ export default function DashProfile() {
         </Button>
         <div className="text-red-600 flex justify-between mt-5">
           <span className="cursor-pointer">Delete Account</span>
-          <span className="cursor-pointer">Sign Out</span>
+          <span className="cursor-pointer" onClick={signOutUser}>
+            Sign Out
+          </span>
         </div>
       </form>
     </div>
