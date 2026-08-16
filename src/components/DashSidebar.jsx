@@ -32,6 +32,7 @@ export default function DashSidebar() {
               icon={CgProfile}
               label={"User"}
               labelColor="dark"
+              as="div"
             >
               Profile
             </SidebarItem>

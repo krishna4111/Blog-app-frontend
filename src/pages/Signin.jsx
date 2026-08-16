@@ -10,6 +10,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
+import { mapUser } from "../dto/user.dto";
 
 export default function Signin() {
   const [formData, setFormData] = useState();
@@ -48,12 +49,18 @@ export default function Signin() {
 
       const data = await result.json();
 
+      console.log("actual user data is this ===>", data);
+
       if (!data.success) {
         dispatch(signInFailure(data.message));
         return;
       }
 
-      dispatch(signInSuccess(data.user));
+      console.log("user data ==>", data.data);
+
+      const user = mapUser(data.data);
+
+      dispatch(signInSuccess(user));
 
       //we get the token keep it in the redux store and toolkit etc.
       navigate("/home");
