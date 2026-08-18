@@ -1,18 +1,26 @@
 import { TextInput, Button, Label } from "flowbite-react";
 import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signOutSuccess, updateUser } from "../redux/user/userSlice";
+import { deleteAccount, updateUser } from "../redux/user/userSlice";
 import { mapUser } from "../dto/user.dto";
 import { useNavigate } from "react-router-dom";
+import ChangePasswordModal from "./ChangePasswordModal";
+import ToastMessage from "./ToastMessage";
+import useSignOut from "../hooks/useSignOut";
 
 export default function DashProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const signout = useSignOut();
+
   const { currentUser } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const filePickerRef = useRef();
+  const [changePassword, setChangePassword] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const [formData, setFormData] = useState({
     username: currentUser.name ?? "",
@@ -71,27 +79,55 @@ export default function DashProfile() {
     }
   };
 
-  const signOutUser = async () => {
-    console.log("signout triggered");
+  const selfDeleteAccount = async () => {
     try {
-      const result = await fetch("http://localhost:4500/api/user/signout", {
-        method: "Post",
+      const result = await fetch("http://localhost:4500/api/user/self-delete", {
+        method: "PUT",
         credentials: "include",
       });
 
       const data = await result.json();
 
-      if (!data.success) {
-        console.error("Error when sing out user", data.message);
+      if (!result.ok && !data.success) {
+        //does we needs alert in here
+        console.error(data.message);
+        return;
       }
-      dispatch(signOutSuccess());
+      //clean redux store
+      dispatch(deleteAccount());
+      //navigate to new sign up
+      navigate("/sign-up");
     } catch (error) {
-      console.error("Error when signout user", error);
+      console.error("Error when deleting the account", error);
     }
   };
 
+  const handleChangePassword = () => {
+    setChangePassword(true);
+  };
+
+  console.log("toast state is", showToast);
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
+      {showToast && (
+        <ToastMessage
+          setShowToast={setShowToast}
+          setShowToast={setShowToast}
+          messageContent={"Password Changed Successfully"}
+          type={"success"}
+        />
+      )}
+      {changePassword ? (
+        <ChangePasswordModal
+          isOpen={changePassword}
+          setIsOpen={setChangePassword}
+          onSuccess={(message) => {
+            setToastMessage(message);
+            setShowToast(true);
+          }}
+        />
+      ) : null}
       <h1 className="my-7 font-semibold text-3xl text-center">Profile</h1>
       <form
         className="flex flex-col gap-4"
@@ -149,6 +185,14 @@ export default function DashProfile() {
           }}
         ></TextInput>
         <Button
+          type="button"
+          className="bg-blue-300 cursor-pointer text-white"
+          outline
+          onClick={handleChangePassword}
+        >
+          Change Password
+        </Button>
+        <Button
           type="submit"
           className="bg-blue-300 cursor-pointer text-white"
           outline
@@ -156,8 +200,10 @@ export default function DashProfile() {
           Update
         </Button>
         <div className="text-red-600 flex justify-between mt-5">
-          <span className="cursor-pointer">Delete Account</span>
-          <span className="cursor-pointer" onClick={signOutUser}>
+          <span className="cursor-pointer" onClick={selfDeleteAccount}>
+            Delete Account
+          </span>
+          <span className="cursor-pointer" onClick={signout}>
             Sign Out
           </span>
         </div>
