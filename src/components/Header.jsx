@@ -16,8 +16,11 @@ import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineLightMode } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleThem } from "../redux/theme/themeSlice";
+import useSignOut from "../hooks/useSignOut";
 
 export default function Header() {
+  const signout = useSignOut();
+
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -87,7 +90,7 @@ export default function Header() {
               <DropdownItem>Profile</DropdownItem>
             </Link>
             <DropdownDivider />
-            <DropdownItem>Sign Out</DropdownItem>
+            <DropdownItem onClick={signout}>Sign Out</DropdownItem>
           </Dropdown>
         )}
       </div>

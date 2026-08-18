@@ -8,8 +8,11 @@ import {
 import { CgProfile } from "react-icons/cg";
 import { GoSignOut } from "react-icons/go";
 import { Link, useLocation } from "react-router-dom";
+import useSignOut from "../hooks/useSignOut";
 
 export default function DashSidebar() {
+  const signout = useSignOut();
+
   const location = useLocation();
   const [tab, setTab] = useState("");
 
@@ -38,7 +41,12 @@ export default function DashSidebar() {
             </SidebarItem>
           </Link>
 
-          <SidebarItem icon={GoSignOut} label={"User"} labelColor="dark">
+          <SidebarItem
+            icon={GoSignOut}
+            label={"User"}
+            labelColor="dark"
+            onClick={signout}
+          >
             SignOut
           </SidebarItem>
         </SidebarItemGroup>
