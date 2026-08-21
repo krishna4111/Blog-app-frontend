@@ -7,8 +7,15 @@ import {
   TextInput,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 const ChangePasswordModal = ({ isOpen, setIsOpen, onSuccess }) => {
+  const [showPassword, setShowPassword] = useState({
+    viewOld: false,
+    viewNew: false,
+    viewRe: false,
+  });
+
   const [formData, setFormData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -114,60 +121,108 @@ const ChangePasswordModal = ({ isOpen, setIsOpen, onSuccess }) => {
                 ) : null}
               </div>
               <div className="mb-2 block">
-                <Label htmlFor="old-password">Your Old password</Label>
+                <Label htmlFor="old_password">Your Old password</Label>
               </div>
-              <TextInput
-                id="old-password"
-                type="password"
-                required
-                value={formData.oldPassword}
-                onChange={(e) => {
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      oldPassword: e.target.value,
-                    };
-                  });
-                }}
-              />
+              <div className="relative">
+                <TextInput
+                  id="old_password"
+                  type={showPassword.viewOld ? "text" : "password"}
+                  required
+                  value={formData.oldPassword}
+                  onChange={(e) => {
+                    setFormData((prev) => {
+                      return {
+                        ...prev,
+                        oldPassword: e.target.value,
+                      };
+                    });
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 hover:cursor-pointer"
+                  onClick={() => {
+                    setShowPassword((prev) => {
+                      return {
+                        ...prev,
+                        viewOld: !showPassword.viewOld,
+                      };
+                    });
+                  }}
+                >
+                  {showPassword.viewOld ? <HiEye /> : <HiEyeOff />}
+                </button>
+              </div>
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="new-password">Your New Password</Label>
+                <Label htmlFor="new_password">Your New Password</Label>
               </div>
-              <TextInput
-                id="new-password"
-                type="password"
-                required
-                value={formData.newPassword}
-                onChange={(e) => {
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      newPassword: e.target.value,
-                    };
-                  });
-                }}
-              />
+              <div className="relative">
+                <TextInput
+                  id="new_password"
+                  type={showPassword.viewNew ? "text" : "password"}
+                  required
+                  value={formData.newPassword}
+                  onChange={(e) => {
+                    setFormData((prev) => {
+                      return {
+                        ...prev,
+                        newPassword: e.target.value,
+                      };
+                    });
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 hover:cursor-pointer"
+                  onClick={() => {
+                    setShowPassword((prev) => {
+                      return {
+                        ...prev,
+                        viewNew: !showPassword.viewNew,
+                      };
+                    });
+                  }}
+                >
+                  {showPassword.viewNew ? <HiEye /> : <HiEyeOff />}
+                </button>
+              </div>
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="re-password">Re-enter Your New Password</Label>
+                <Label htmlFor="re_password">Re-enter Your New Password</Label>
               </div>
-              <TextInput
-                id="re-password"
-                type="password"
-                required
-                value={formData.rePassword}
-                onChange={(e) => {
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      rePassword: e.target.value,
-                    };
-                  });
-                }}
-              />
+              <div className="relative">
+                <TextInput
+                  id="re_password"
+                  type={showPassword.viewRe ? "text" : "password"}
+                  required
+                  value={formData.rePassword}
+                  onChange={(e) => {
+                    setFormData((prev) => {
+                      return {
+                        ...prev,
+                        rePassword: e.target.value,
+                      };
+                    });
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 hover:cursor-pointer"
+                  onClick={() => {
+                    setShowPassword((prev) => {
+                      return {
+                        ...prev,
+                        viewRe: !showPassword.viewRe,
+                      };
+                    });
+                  }}
+                >
+                  {showPassword.viewRe ? <HiEye /> : <HiEyeOff />}
+                </button>
+              </div>
             </div>
             <div className="w-full flex justify-center ">
               <Button

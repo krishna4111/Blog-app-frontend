@@ -11,9 +11,11 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
 import { mapUser } from "../dto/user.dto";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 export default function Signin() {
   const [formData, setFormData] = useState();
+  const [showPassword, setShowPassword] = useState();
 
   const { loading: isLoading, error: errorMessage } = useSelector(
     (state) => state.user,
@@ -106,19 +108,30 @@ export default function Signin() {
             </div>
             <div>
               <Label>Password</Label>
-              <TextInput
-                type="password"
-                placeholder="Enter your password"
-                id="password"
-                onChange={(e) => {
-                  setFormData((prevState) => {
-                    return {
-                      ...prevState,
-                      [e.target.id]: e.target.value,
-                    };
-                  });
-                }}
-              ></TextInput>
+              <div className="relative">
+                <TextInput
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  id="password"
+                  onChange={(e) => {
+                    setFormData((prevState) => {
+                      return {
+                        ...prevState,
+                        [e.target.id]: e.target.value,
+                      };
+                    });
+                  }}
+                ></TextInput>
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 text-black hover:cursor-pointer"
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {showPassword ? <HiEye /> : <HiEyeOff />}
+                </button>
+              </div>
             </div>
             {errorMessage && (
               <p className="font-semibold text-red-700 p-2">{errorMessage}</p>

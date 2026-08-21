@@ -2,11 +2,14 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleOnChange = (event) => {
@@ -18,6 +21,7 @@ export default function Signup() {
 
     if (!formData.username || !formData.email || !formData.password) {
       setErrorMessage("Please Fill all the fields");
+      return;
     }
 
     try {
@@ -97,12 +101,28 @@ export default function Signup() {
 
             <div>
               <Label>Password</Label>
-              <TextInput
-                type="password"
-                placeholder="Enter your password here"
-                id="password"
-                onChange={handleOnChange}
-              ></TextInput>
+
+              <div className="relative">
+                <TextInput
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password here"
+                  id="password"
+                  onChange={handleOnChange}
+                ></TextInput>
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:cursor-pointer"
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {showPassword ? (
+                    <HiEye className="" />
+                  ) : (
+                    <HiEyeOff className="" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <Button
