@@ -9,8 +9,11 @@ import { CgProfile } from "react-icons/cg";
 import { GoSignOut } from "react-icons/go";
 import { Link, useLocation } from "react-router-dom";
 import useSignOut from "../hooks/useSignOut";
+import { useSelector } from "react-redux";
+import { FaUsers } from "react-icons/fa";
 
 export default function DashSidebar() {
+  const user = useSelector((state) => state.user);
   const signout = useSignOut();
 
   const location = useLocation();
@@ -26,9 +29,9 @@ export default function DashSidebar() {
   }, [location.search]);
 
   return (
-    <Sidebar className="w-full md:w-56">
+    <Sidebar className="w-full md:w-56 ">
       <SidebarItems>
-        <SidebarItemGroup>
+        <SidebarItemGroup className="flex flex-col">
           <Link to="/dashboard?tab=profile">
             <SidebarItem
               active={tab === "profile"}
@@ -40,6 +43,20 @@ export default function DashSidebar() {
               Profile
             </SidebarItem>
           </Link>
+
+          {user.currentUser.role === "Admin" && (
+            <Link to="/dashboard?tab=users">
+              <SidebarItem
+                active={tab === "users"}
+                icon={FaUsers}
+                label={"User"}
+                labelColor="dark"
+                as="div"
+              >
+                Users
+              </SidebarItem>
+            </Link>
+          )}
 
           <SidebarItem
             icon={GoSignOut}

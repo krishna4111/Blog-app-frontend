@@ -5,5 +5,6 @@ export const mapUser = (user) => {
     name: user.username,
     email: user.email,
     profileUrl: user?.profile?.url,
+    role: user?.role,
   };
 };
