@@ -8,7 +8,13 @@ import {
 
 import UserTableBody from "./UserTableBody";
 
-const UserTable = ({ users }) => {
+const UserTable = ({
+  users,
+  setModalType,
+  setSelectedUser,
+  handleEditUser,
+  handleDeleteUser,
+}) => {
   return (
     <div className="p-2">
       <Table hoverable>
@@ -26,7 +32,16 @@ const UserTable = ({ users }) => {
         </TableHead>
         <TableBody className="divide-y">
           {users.map((user) => {
-            return <UserTableBody key={user._id.toString()} user={user} />;
+            return (
+              <UserTableBody
+                key={user._id.toString()}
+                user={user}
+                setModalType={setModalType}
+                setSelectedUser={setSelectedUser}
+                handleEditUser={handleEditUser}
+                handleDeleteUser={handleDeleteUser}
+              />
+            );
           })}
         </TableBody>
       </Table>

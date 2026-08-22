@@ -6,7 +6,7 @@ import {
   ModalHeader,
   TextInput,
 } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 
 const ChangePasswordModal = ({ isOpen, setIsOpen, onSuccess }) => {

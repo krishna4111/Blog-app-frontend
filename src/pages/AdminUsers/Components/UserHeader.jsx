@@ -1,9 +1,9 @@
 import { Button } from "flowbite-react";
 import { IoIosAdd } from "react-icons/io";
 
-const UserHeader = () => {
-  const handleAddUser = async () => {
-    console.log("handling add user ");
+const UserHeader = ({ handleAddUser }) => {
+  const handleAddingUser = async () => {
+    handleAddUser();
   };
 
   return (
@@ -16,7 +16,7 @@ const UserHeader = () => {
         </h3>
       </div>
       <div>
-        <Button onClick={handleAddUser} className="hover:cursor-pointer ">
+        <Button onClick={handleAddingUser} className="hover:cursor-pointer ">
           <IoIosAdd size={20} />
           Add User
         </Button>

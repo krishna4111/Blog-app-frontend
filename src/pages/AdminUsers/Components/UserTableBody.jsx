@@ -2,24 +2,24 @@ import { Button, TableCell, TableRow, ToggleSwitch } from "flowbite-react";
 import { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import useUsers from "../../../hooks/useUsers";
 
-const UserTableBody = ({ user }) => {
+const UserTableBody = ({ user, handleEditUser, handleDeleteUser }) => {
   const { _id, username, status, role, createdAt } = user;
 
   const toggleStatus = status === "active" ? true : false;
 
   const [toggleOn, setToggleOn] = useState(toggleStatus);
 
+  const { changeUserStatus } = useUsers();
+
   const handleStatusChange = () => {
-    console.log("toggle user status");
     setToggleOn(!toggleOn);
+    changeUserStatus({ userId: _id, status: toggleOn });
   };
 
-  const handleEditUser = () => {
-    console.log("handle edit");
-  };
-  const handleDeleteUser = () => {
-    console.log("handle delete");
+  const handleDeletingUser = () => {
+    handleDeleteUser(user);
   };
 
   return (
@@ -43,11 +43,16 @@ const UserTableBody = ({ user }) => {
         />
       </TableCell>
       <TableCell>
-        <div className="flex justify-between p-2">
-          <Button className="hover:cursor-pointer" onClick={handleEditUser}>
+        <div className="p-2 flex justify-center items-center gap-2">
+          <Button
+            className="hover:cursor-pointer"
+            onClick={() => {
+              handleEditUser(user);
+            }}
+          >
             <MdModeEditOutline />
           </Button>
-          <Button className="hover:cursor-pointer" onClick={handleDeleteUser}>
+          <Button className="hover:cursor-pointer" onClick={handleDeletingUser}>
             <MdDelete />
           </Button>
         </div>
