@@ -1,7 +1,32 @@
-import { useState } from "react";
-
 const useUsers = () => {
-  const [user, setUser] = useState({});
+  const addUser = async ({ userData }) => {
+    try {
+      const result = await fetch("http://localhost:4500/api/admin/add-user", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!result.ok) {
+        console.error("Error when add user as admin");
+        return;
+      }
+
+      const data = await result.json();
+
+      if (!data.success) {
+        console.error(data.message);
+        return;
+      }
+
+      return data.data;
+    } catch (error) {
+      console.error("Error when add a new user", error);
+    }
+  };
 
   const updateUser = async ({ userId, updateBodyData }) => {
     try {
@@ -9,7 +34,7 @@ const useUsers = () => {
         `http://localhost:4500/api/admin/update-user/${userId}`,
         {
           method: "PUT",
-          credentials: " include",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -22,14 +47,13 @@ const useUsers = () => {
         return;
       }
 
-      const data = await data.json();
+      const data = await result.json();
 
       if (!data.success) {
         console.error("Error when update user", data.message);
         return;
       }
-
-      setUser(data.data);
+      return data.data;
     } catch (error) {
       console.error("Error when update user", error);
     }
@@ -87,13 +111,13 @@ const useUsers = () => {
         return;
       }
 
-      setUser(data.data);
+      return data.data;
     } catch (error) {
       console.error("Error when change user status", error);
     }
   };
 
-  return { user, updateUser, deleteUser, changeUserStatus };
+  return { updateUser, deleteUser, changeUserStatus, addUser };
 };
 
 export default useUsers;
