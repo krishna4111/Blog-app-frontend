@@ -16,7 +16,7 @@ const UserTable = ({
   handleDeleteUser,
 }) => {
   return (
-    <div className="p-2">
+    <div className="p-2 pb-0 ">
       <Table hoverable>
         <TableHead>
           <TableRow>

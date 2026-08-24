@@ -14,8 +14,12 @@ const UserTableBody = ({ user, handleEditUser, handleDeleteUser }) => {
   const { changeUserStatus } = useUsers();
 
   const handleStatusChange = () => {
-    setToggleOn(!toggleOn);
-    changeUserStatus({ userId: _id, status: toggleOn });
+    const changeStatus = !toggleOn;
+    setToggleOn(changeStatus);
+    changeUserStatus({
+      userId: _id,
+      status: changeStatus ? "active" : "inactive",
+    });
   };
 
   const handleDeletingUser = () => {

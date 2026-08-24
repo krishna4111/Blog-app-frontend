@@ -115,6 +115,15 @@ const ModalForm = ({
                 <TextInput
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={(event) => {
+                    setFormData((prev) => {
+                      return {
+                        ...prev,
+                        password: event.target.value,
+                      };
+                    });
+                  }}
                 />
                 <button
                   type="button"
