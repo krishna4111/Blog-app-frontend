@@ -7,11 +7,12 @@ import ConfirmModal from "../../components/ConfirmModal";
 import useUsers from "../../hooks/useUsers";
 import ModalForm from "./Components/ModalForm";
 import ToastMessage from "../../components/ToastMessage";
+import PaginationButton from "../../components/PaginationButton";
 
 //TODO:Don't pass the setstate down to the child pass the cb instead
 const AdminUsers = () => {
-  const { getUsers, users, loading, errorMessage } = useGetUsers();
-  const { deleteUser, updateUser, addUser } = useUsers;
+  const { getUsers, users, loading, errorMessage, pagination } = useGetUsers();
+  const { deleteUser, updateUser, addUser } = useUsers();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
 
@@ -21,6 +22,13 @@ const AdminUsers = () => {
 
   const [selectedUser, setSelectedUser] = useState();
   const [modalType, setModalType] = useState();
+
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState({
+    status: "",
+    role: "",
+    search: "",
+  });
 
   //NOTE: used to close the normal modal box , handling from  the parent
   const closeModal = () => {
@@ -37,7 +45,7 @@ const AdminUsers = () => {
 
   //NOTE: from modal this function will be triggered
   const deleteUserAd = () => {
-    deleteUser({ userId: selectedUser._id });
+    deleteUser(selectedUser._id);
   };
 
   //NOTE: used to open the modal
@@ -89,9 +97,23 @@ const AdminUsers = () => {
     }
   };
 
+  const handleFilterChange = (newFilters) => {
+    setPage(1);
+    setFilters((prev) => {
+      return {
+        ...prev,
+        ...newFilters,
+      };
+    });
+  };
+
   useEffect(() => {
-    getUsers();
-  }, []);
+    getUsers({
+      page,
+      limit: 10,
+      ...filters,
+    });
+  }, [page, filters]);
 
   return (
     <div className="w-full flex flex-col gap-6">
@@ -104,17 +126,23 @@ const AdminUsers = () => {
         />
       )}
       <UserHeader handleAddUser={handleAddUser} />
-      <UserFilter />
+      <UserFilter filters={filters} onFilterChange={handleFilterChange} />
       {loading && <p>loading users ...</p>}
       {errorMessage && <p>{errorMessage}</p>}
       {!loading && !errorMessage && (
-        <UserTable
-          users={users}
-          setModalType={setModalType}
-          setSelectedUser={setSelectedUser}
-          handleEditUser={handleEditUser}
-          handleDeleteUser={handleDeleteUser}
-        />
+        <>
+          <UserTable
+            users={users}
+            setModalType={setModalType}
+            setSelectedUser={setSelectedUser}
+            handleEditUser={handleEditUser}
+            handleDeleteUser={handleDeleteUser}
+          />
+          <PaginationButton
+            paginationData={pagination}
+            onPageChange={setPage}
+          />
+        </>
       )}
       {modalType === "delete" && (
         <ConfirmModal

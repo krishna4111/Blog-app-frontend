@@ -1,93 +1,71 @@
-import { Label, Select, TextInput } from "flowbite-react";
+import { Button, Label, Select, TextInput } from "flowbite-react";
+import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 
-const UserFilter = () => {
+const UserFilter = ({ filters, onFilterChange }) => {
+  const [searchInput, setSearchInput] = useState(filters.search);
+
+  console.log("filters are ===>", filters);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    onFilterChange({ search: searchInput });
+  };
+
   return (
     <div className=" p-4 border border-gray-400 bg-gray-900  rounded-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-5xl gap-8">
-      <div>
+      <div className="relative">
         <Label htmlFor="roles">Search</Label>
         <TextInput
           type="text"
           id="search"
           placeholder="Search here"
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
+          className="relative"
         ></TextInput>
+        <Button
+          type="button"
+          className="absolute right-0 top-6 hover:cursor-pointer"
+          onClick={handleSearch}
+        >
+          <FaSearch />
+        </Button>
       </div>
       <div>
         <Label htmlFor="roles">Role</Label>
-        <Select id="roles" required>
-          <option>Admin</option>
-          <option>User</option>
+        <Select
+          id="roles"
+          value={filters.role}
+          onChange={(e) => {
+            onFilterChange({ role: e.target.value });
+          }}
+          required
+        >
+          <option value="all">All</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
         </Select>
       </div>
       <div>
         <Label htmlFor="status">Status</Label>
-        <Select id="status" required>
-          <option>Active</option>
-          <option>Inactive</option>
+        <Select
+          id="status"
+          value={filters.status}
+          onChange={(e) => {
+            onFilterChange({ status: e.target.value });
+          }}
+          required
+        >
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
         </Select>
       </div>
     </div>
   );
 };
-
-// const UserFilter = () => {
-//   return (
-//     <div className="rounded-xl border border-gray-700 bg-gray-900/50 p-4">
-//       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-//         {/* Search */}
-//         <div className="lg:col-span-1">
-//           <label className="mb-2 block text-sm font-medium text-gray-300">
-//             Search
-//           </label>
-
-//           <input
-//             type="text"
-//             placeholder="Search users..."
-//             className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
-//           />
-//         </div>
-
-//         {/* Role */}
-//         <div>
-//           <label className="mb-2 block text-sm font-medium text-gray-300">
-//             Role
-//           </label>
-
-//           <select className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2.5 text-white focus:border-blue-500 focus:ring-blue-500">
-//             <option>All Roles</option>
-//             <option>User</option>
-//             <option>Admin</option>
-//           </select>
-//         </div>
-
-//         {/* Status */}
-//         <div>
-//           <label className="mb-2 block text-sm font-medium text-gray-300">
-//             Status
-//           </label>
-
-//           <select className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2.5 text-white focus:border-blue-500 focus:ring-blue-500">
-//             <option>All Status</option>
-//             <option>Active</option>
-//             <option>Deleted</option>
-//           </select>
-//         </div>
-
-//         {/* Sort */}
-//         <div>
-//           <label className="mb-2 block text-sm font-medium text-gray-300">
-//             Sort By
-//           </label>
-
-//           <select className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2.5 text-white focus:border-blue-500 focus:ring-blue-500">
-//             <option>Newest</option>
-//             <option>Oldest</option>
-//             <option>Name A-Z</option>
-//             <option>Name Z-A</option>
-//           </select>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
 export default UserFilter;
