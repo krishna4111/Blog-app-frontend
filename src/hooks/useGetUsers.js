@@ -4,16 +4,55 @@ const useGetUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [pagination, setPagination] = useState({});
 
-  const getUsers = async () => {
+  const getUsers = async ({
+    page = 1,
+    limit = 10,
+    search = "",
+    role = "",
+    status = "",
+  }) => {
     try {
       setLoading(true);
       setErrorMessage(null);
 
-      const result = await fetch(`http://localhost:4500/api/admin/get-users`, {
-        method: "GET",
-        credentials: "include",
+      console.log(
+        "get Users Hook ===>",
+        "page",
+        page,
+        "limit",
+        limit,
+        "search",
+        search,
+        "role",
+        role,
+        "status",
+        status,
+      );
+
+      const params = new URLSearchParams({
+        page,
+        limit,
       });
+
+      if (search) {
+        params.append("search", search);
+      }
+      if (status) {
+        params.append("status", status);
+      }
+      if (role) {
+        params.append("role", role);
+      }
+
+      const result = await fetch(
+        `http://localhost:4500/api/admin/get-users?${params}`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
 
       if (!result.ok) {
         console.error("Error when fetching user details");
@@ -35,6 +74,10 @@ const useGetUsers = () => {
       setUsers((prev) => {
         return data.data;
       });
+
+      setPagination(() => {
+        return data.pagination;
+      });
     } catch (error) {
       console.error("Error when get users", error);
       setErrorMessage(error.message);
@@ -42,7 +85,7 @@ const useGetUsers = () => {
     }
   };
 
-  return { users, loading, errorMessage, getUsers };
+  return { users, loading, errorMessage, getUsers, pagination };
 };
 
 export default useGetUsers;
