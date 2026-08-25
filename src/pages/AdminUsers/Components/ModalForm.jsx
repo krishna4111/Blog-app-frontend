@@ -88,54 +88,60 @@ const ModalForm = ({
                 required
               />
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email">Email</Label>
-              </div>
-              <TextInput
-                id="email"
-                placeholder="name@company.com"
-                value={formData.email}
-                onChange={(event) => {
-                  setFormData((prev) => {
-                    return {
-                      ...prev,
-                      email: event.target.value,
-                    };
-                  });
-                }}
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="password">Password</Label>
-              </div>
-              <div className="relative">
+            {type === "add" && (
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="email">Email</Label>
+                </div>
                 <TextInput
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
+                  id="email"
+                  placeholder="name@company.com"
+                  value={formData.email}
                   onChange={(event) => {
                     setFormData((prev) => {
                       return {
                         ...prev,
-                        password: event.target.value,
+                        email: event.target.value,
                       };
                     });
                   }}
+                  required
                 />
-                <button
-                  type="button"
-                  className="absolute right-3 top-3 hover:cursor-pointer"
-                  onClick={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                >
-                  {showPassword ? <HiEye /> : <HiEyeOff />}
-                </button>
               </div>
-            </div>
+            )}
+
+            {type === "add" && (
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="password">Password</Label>
+                </div>
+
+                <div className="relative">
+                  <TextInput
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(event) => {
+                      setFormData((prev) => {
+                        return {
+                          ...prev,
+                          password: event.target.value,
+                        };
+                      });
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 hover:cursor-pointer"
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                  >
+                    {showPassword ? <HiEye /> : <HiEyeOff />}
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="max-w-md">
               <div className="mb-2 block">
                 <Label htmlFor="role">Role</Label>
