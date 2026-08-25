@@ -18,7 +18,6 @@ const ModalForm = ({
   userData,
   handleFormSubmit,
 }) => {
-  console.log("user data is ==>", userData);
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -52,7 +51,6 @@ const ModalForm = ({
   }, [type, userData]);
 
   const handleFormSubmission = (e) => {
-    console.log("form submission is triggered");
     e.preventDefault();
 
     if (type === "add") {
@@ -60,6 +58,7 @@ const ModalForm = ({
       closeModal();
     } else if (type === "edit") {
       handleFormSubmit({ userId: userData._id, updateUserData: formData });
+      closeModal();
     }
   };
 

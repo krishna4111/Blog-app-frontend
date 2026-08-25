@@ -11,7 +11,8 @@ import PaginationButton from "../../components/PaginationButton";
 
 //TODO:Don't pass the setstate down to the child pass the cb instead
 const AdminUsers = () => {
-  const { getUsers, users, loading, errorMessage, pagination } = useGetUsers();
+  const { getUsers, users, setUsers, loading, errorMessage, pagination } =
+    useGetUsers();
   const { deleteUser, updateUser, addUser } = useUsers();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -69,12 +70,27 @@ const AdminUsers = () => {
   //NOTE: The following two functions are called from the form modal
   const handleUpdateUser = async ({ userId, updateUserData }) => {
     try {
-      await updateUser({
+      const updatedUser = await updateUser({
         userId,
         updateBodyData: updateUserData,
       });
+
       setShowToast(true);
       setToastMessage("User Updated Successfully!!!");
+
+      setUsers((prev) => {
+        console.log("prev ==>", prev);
+
+        return prev.map((user) => {
+          if (user._id.toString() === userId) {
+            return {
+              ...user,
+              ...updatedUser,
+            };
+          }
+          return user;
+        });
+      });
     } catch (error) {
       console.error("error when update user", error);
       setShowToast(true);
@@ -85,10 +101,12 @@ const AdminUsers = () => {
 
   const createUser = async ({ userData }) => {
     try {
-      console.log("it is triggered");
-      await addUser({ userData });
+      const createdUser = await addUser({ userData });
       setShowToast(true);
       setToastMessage("user added successfully!!!");
+      setUsers((prev) => {
+        return [createdUser, ...prev];
+      });
     } catch (error) {
       setShowToast(true);
       setToastMessage("user creation failed");

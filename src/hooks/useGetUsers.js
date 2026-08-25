@@ -85,7 +85,7 @@ const useGetUsers = () => {
     }
   };
 
-  return { users, loading, errorMessage, getUsers, pagination };
+  return { users, setUsers, loading, errorMessage, getUsers, pagination };
 };
 
 export default useGetUsers;
