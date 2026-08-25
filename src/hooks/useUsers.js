@@ -88,7 +88,7 @@ const useUsers = () => {
   const changeUserStatus = async ({ userId, status }) => {
     try {
       const result = await fetch(
-        `http://localhost:4500/api/admin/chnage-user-status/${userId}`,
+        `http://localhost:4500/api/admin/change-user-status/${userId}`,
         {
           method: "PUT",
           credentials: "include",
