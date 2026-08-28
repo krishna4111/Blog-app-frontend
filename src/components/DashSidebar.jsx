@@ -4,6 +4,7 @@ import {
   SidebarItemGroup,
   SidebarItems,
   SidebarItem,
+  SidebarCollapse,
 } from "flowbite-react";
 import { CgProfile } from "react-icons/cg";
 import { GoSignOut } from "react-icons/go";
@@ -11,6 +12,7 @@ import { Link, useLocation } from "react-router-dom";
 import useSignOut from "../hooks/useSignOut";
 import { useSelector } from "react-redux";
 import { FaUsers } from "react-icons/fa";
+import { BsFillSignpost2Fill } from "react-icons/bs";
 
 export default function DashSidebar() {
   const user = useSelector((state) => state.user);
@@ -57,6 +59,27 @@ export default function DashSidebar() {
               </SidebarItem>
             </Link>
           )}
+
+          <SidebarCollapse
+            icon={BsFillSignpost2Fill}
+            className="hover:cursor-pointer"
+            label="E-commerce"
+          >
+            <Link to="/dashboard?tab=all-post">
+              <SidebarItem
+                className="mb-2"
+                active={tab === "all -post"}
+                as="div"
+              >
+                All Posts
+              </SidebarItem>
+            </Link>
+            <Link to="/dashboard?tab=my-post">
+              <SidebarItem active={tab === "my-post"} as="div">
+                My Posts
+              </SidebarItem>
+            </Link>
+          </SidebarCollapse>
 
           <SidebarItem
             icon={GoSignOut}

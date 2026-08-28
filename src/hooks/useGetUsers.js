@@ -17,20 +17,6 @@ const useGetUsers = () => {
       setLoading(true);
       setErrorMessage(null);
 
-      console.log(
-        "get Users Hook ===>",
-        "page",
-        page,
-        "limit",
-        limit,
-        "search",
-        search,
-        "role",
-        role,
-        "status",
-        status,
-      );
-
       const params = new URLSearchParams({
         page,
         limit,
