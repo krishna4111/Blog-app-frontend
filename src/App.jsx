@@ -9,6 +9,7 @@ import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import FooterComponent from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
+import AddPost from "./pages/PostPage/AddPost/AddPost";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sign-in" element={<Signin />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/posts/create" element={<AddPost />} />
         </Route>
         <Route path="/projects" element={<Projects />} />
       </Routes>

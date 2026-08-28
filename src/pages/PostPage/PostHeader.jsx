@@ -1,8 +1,10 @@
 import { Button, Select, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const PostHeader = ({ mode, filters, onFilterChange }) => {
+  const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState(filters.search);
 
   useEffect(() => {
@@ -59,7 +61,12 @@ const PostHeader = ({ mode, filters, onFilterChange }) => {
           </Select>
 
           {mode === "my" && (
-            <Button className="w-full whitespace-nowrap sm:w-auto hover:cursor-pointer">
+            <Button
+              className="w-full whitespace-nowrap sm:w-auto hover:cursor-pointer"
+              onClick={() => {
+                navigate("/dashboard/posts/create");
+              }}
+            >
               Create Post
             </Button>
           )}
